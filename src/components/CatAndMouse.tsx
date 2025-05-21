@@ -415,10 +415,11 @@ const CatAndMouse: FC = () => {
       const mouseY = e.clientY - rect.top;
       // Angle from cat to mouse
       const angleRad = Math.atan2(mouseY - catRectY, mouseX - catRectX);
-      // Offset by +90 so feet are down, head points at cursor (assuming cat.gif faces up by default)
-      const angleDeg = angleRad * (180 / Math.PI) + 90;
-      catAngleRef.current = angleDeg;
-      setCatAngle(angleDeg);
+      const angleDeg = angleRad * (180 / Math.PI);
+      // Add 180 so the face points at the cursor (assuming cat.gif faces up by default)
+      const correctedAngle = angleDeg + 180;
+      catAngleRef.current = correctedAngle;
+      setCatAngle(correctedAngle);
     };
     window.addEventListener('mousemove', handleWindowMouseMove);
     return () => window.removeEventListener('mousemove', handleWindowMouseMove);
@@ -538,8 +539,8 @@ const CatAndMouse: FC = () => {
           width: CAT_SIZE,
           height: CAT_SIZE,
           transform: `translate(-50%, -50%) rotate(${catAngle}deg)`,
-          transformOrigin: 'center',
-          transition: 'transform 0.2s cubic-bezier(0.4,0,0.2,1)',
+          transformOrigin: 'center center',
+          transition: 'transform 0.1s linear',
         }}
       >
         <Image
